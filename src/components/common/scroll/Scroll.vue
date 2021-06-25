@@ -34,6 +34,10 @@
         click: true,
         probeType: this.probeType,
         pullUpLoad: this.pullUpLoad,
+        observeImage: true,
+        observeDOM: true,
+        startX: true,
+        screenY: true
       })
 
       // 2.监听滚动的位置

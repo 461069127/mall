@@ -70,9 +70,6 @@
         return this.goods[this.currentType].list
       }
     },
-    destroyed() {
-      console.log('home destroyed');
-    },
     activated() {
       this.$refs.scroll.scrollTo(0, this.saveY)
       this.$refs.scroll.refresh()
