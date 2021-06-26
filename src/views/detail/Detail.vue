@@ -115,6 +115,7 @@
       }
       this.$bus.$on('itemImageLoad', this.itemImgListener)
     },
+    
     beforeDestroy() {
       this.$bus.$off('itemImageLoad', this.itemImgListener)
     },
