@@ -1,6 +1,8 @@
 <template>
   <div id="detail">
-    <detail-nav-bar class="detail-nav" @itemClick="itemClick"/>
+    <detail-nav-bar class="detail-nav"
+                    @itemClick="itemClick"
+                    ref="nav"/>
     <scroll class="content" 
             ref="scroll" 
             :probe-type="3"
@@ -65,7 +67,8 @@
         itemImgListener: null,
         getThemePosY: null,
         newRefresh: null,
-        isShowTop: false
+        isShowTop: false,
+        currentIndex: 0
       }
     },
     created() {
@@ -97,7 +100,14 @@
         // 7.获取推荐的信息
       getRecommend().then(res =>{
         this.recommends = res.data.list
-      })
+      }) 
+    },
+    mounted(){
+      const refresh = debounce(this.$refs.scroll.refresh, 50)
+      this.itemImgListener = () =>{
+        refresh()
+      }
+      this.$bus.$on('itemImageLoad', this.itemImgListener)
 
       this.getThemePosY = debounce(() => {
         this.themePosY = [0];
@@ -105,24 +115,17 @@
         this.themePosY.push(-this.$refs.commentRef.$el.offsetTop + 44);
         this.themePosY.push(-this.$refs.recommendRef.$el.offsetTop + 44);
         console.log(this.themePosY);
-      }, 100);   
+      }, 50);
     },
-    mounted(){
-      this.newRefresh = debounce(() =>{this.$refs.scroll.refresh()})
-      this.itemImgListener = () =>{
-        this.newRefresh()
-        this.getThemePosY()
-      }
-      this.$bus.$on('itemImageLoad', this.itemImgListener)
-    },
-    
+
     beforeDestroy() {
       this.$bus.$off('itemImageLoad', this.itemImgListener)
     },
 
     methods: {     
       imageLoad() {
-        this.$refs.scroll.refresh()
+        this.itemImgListener()
+        this.getThemePosY()
       },
       
       itemClick(index) {
@@ -130,8 +133,16 @@
       },
 
       contentScroll(position){
-        this.isShowTop = -position.y > 1000
-        console.log(position.y);
+        this.isShowTop = -position.y > 1000;
+        let length = this.themePosY.length
+        let positionY = -position.y
+        for(let i=0; i<length; i++){
+          if(this.currentIndex !== i && ((i < length - 1 && positionY >= -this.themePosY[i] && positionY < -this.themePosY[i+1] ) || (i === length - 1 && positionY >= -this.themePosY[i]))){
+            this.currentIndex = i
+            console.log(this.currentIndex); 
+            this.$refs.nav.currIndex = this.currentIndex
+          }
+        }
       },
 
       backTop(){
