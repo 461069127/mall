@@ -7,7 +7,8 @@
             ref="scroll" 
             :probe-type="3"
             @scroll="contentScroll" >
-      <detail-swiper :top-images="topImages"/>
+      <detail-swiper :top-images="topImages"
+                     ref="detailSwiper"/>
       <detail-base-info :goods="goods"/>
       <detail-shop-info :shop="shop"/>
       <detail-goods-info :detail-info="detailInfo" @imageLoad="imageLoad"/>
@@ -15,7 +16,7 @@
       <detail-comment :comment="comment" ref="commentRef"/>
       <goods-list :goods="recommends" ref="recommendRef"/>
     </scroll>
-    <detail-bottom-bar/>
+    <detail-bottom-bar @addcart="addToCart"/>
     <back-top v-show="isShowTop" @click.native="backTop"/>
   </div>
 </template>
@@ -114,7 +115,6 @@
         this.themePosY.push(-this.$refs.paramsRef.$el.offsetTop + 44);
         this.themePosY.push(-this.$refs.commentRef.$el.offsetTop + 44);
         this.themePosY.push(-this.$refs.recommendRef.$el.offsetTop + 44);
-        console.log(this.themePosY);
       }, 50);
     },
 
@@ -127,6 +127,9 @@
         this.itemImgListener()
         this.getThemePosY()
       },
+      // swiperImageLoad(){
+      //   this.$refs.detailSwiper.playTime()
+      // },
       
       itemClick(index) {
         this.$refs.scroll.scrollTo(0, this.themePosY[index], 700);
@@ -143,6 +146,18 @@
             this.$refs.nav.currIndex = this.currentIndex
           }
         }
+      },
+      addToCart(){
+        const product = {};
+        product.image = this.topImages[0];
+        product.title = this.goods.title;
+        product.desc = this.goods.desc;
+        product.price = this.goods.realPrice;
+        product.iid = this.iid;
+
+        // this.$store.commit('addCart', product)
+        this.$store.dispatch('addCart', product)
+
       },
 
       backTop(){
@@ -167,6 +182,12 @@
   }
 
   .content {
-    height: calc(100% - 44px - 2.09rem);
+    overflow: hidden;
+
+    position: absolute;
+    top: 44px;
+    bottom: 49px;
+    left: 0;
+    right: 0;
   }
 </style>

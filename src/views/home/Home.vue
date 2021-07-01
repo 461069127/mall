@@ -1,6 +1,12 @@
 <template>
   <div id="home" class="wrapper">
-    <nav-bar class="home-nav"><div slot="center">购物街</div></nav-bar>
+    <nav-bar class="home-nav">
+      <template #center>
+        <div class="">
+          购物车
+        </div>
+      </template>
+    </nav-bar>
     <tab-control :titles="['流行', '新款', '精选']"
                  @tabClick="tabClick"
                  ref="tabControl1"
@@ -11,7 +17,9 @@
             @scroll="contentScroll"
             :pull-up-load="true"
             @pullingUp="loadMore">
-      <home-swiper :banners="banners" @swiperImageLoad="swiperImageLoad" ref="homeSwiper"/>
+      <home-swiper :banners="banners" 
+                   @swiperImageLoad="swiperImageLoad" 
+                   ref="homeSwiper"/>
       <recommend-view :recommends="recommends"/>
       <feature-view/>
       <tab-control :titles="['流行', '新款', '精选']"
@@ -47,7 +55,7 @@
       TabControl,
       GoodList,
       Scroll,
-      BackTop
+      BackTop,
     },
     data() {
       return {
@@ -62,7 +70,8 @@
         isShowBackTop: false,
         tabOffsetTop: 0,
         isTabFixed: false,
-        saveY: 0
+        saveY: 0,
+        itemImgListener: null
       }
     },
     computed: {
@@ -89,9 +98,10 @@
     mounted() {
       // 1.图片加载完成的事件监听
       const refresh = debounce(this.$refs.scroll.refresh, 50)
-      this.$bus.$on('itemImageLoad', () => {
+      this.itemImgListener = () =>{
         refresh()
-      })
+      }
+      this.$bus.$on('itemImageLoad', this.itemImgListener)
     },
     methods: {
       /**
@@ -126,6 +136,7 @@
         this.getHomeGoods(this.currentType)
       },
       swiperImageLoad() {
+        this.itemImgListener()
         this.tabOffsetTop = this.$refs.tabControl2.$el.offsetTop;
       },
       /**

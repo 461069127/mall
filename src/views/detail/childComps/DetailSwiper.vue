@@ -1,8 +1,9 @@
 <template>
-  <swiper class="detail-swiper">
+  <swiper class="detail-swiper"
+          ref="swiper">
     <swiper-item v-for="(item, index) in topImages"
                  :key="index">
-      <img :src="item" alt="">
+      <img :src="item" alt="" @load="imageLoad">
     </swiper-item>
   </swiper>
 </template>
@@ -23,6 +24,17 @@
           return []
         }
       }
+    },
+    methods:{
+      imageLoad(){
+        if (!this.isLoad) {
+          this.$emit('swiperImageLoad')
+          this.isLoad = true
+        }
+      },
+      // playTime(){
+      //   this.$refs.swiper.startTimer()
+      // }
     }
   }
 </script>
