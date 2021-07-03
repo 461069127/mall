@@ -28,7 +28,5 @@ export default {
 </script>
 
 <style scopend>
-  .cart-list{
-    
-  }
+
 </style>

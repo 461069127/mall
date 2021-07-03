@@ -3,7 +3,7 @@
     <nav-bar class="nav-bar">
       <template #center>
         <div>
-          购物车{{cartLength}}
+          购物车 {{cartLength}}
         </div>
       </template>
     </nav-bar>
@@ -11,12 +11,14 @@
             ref="scroll">
       <cart-list></cart-list>
     </scroll>
+    <cart-bottom-bar/>
   </div>
 </template>
 
 <script>
   import NavBar from '../../components/common/navbar/NavBar.vue'
   import CartList from './childComps/CartList.vue'
+  import CartBottomBar from './childComps/CartBottomBar.vue'
 
 
   import { mapGetters } from 'vuex'
@@ -27,7 +29,8 @@
     components: {
       NavBar,
       Scroll,
-      CartList 
+      CartList,
+      CartBottomBar 
     },
     computed: {
       ...mapGetters(['cartLength'])
@@ -55,7 +58,6 @@
     top: 44px;
     left: 0;
     right: 0;
-    bottom: 49px;
+    bottom: 89px;
   }
-  
 </style>

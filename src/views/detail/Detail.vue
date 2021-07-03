@@ -156,7 +156,10 @@
         product.iid = this.iid;
 
         // this.$store.commit('addCart', product)
-        this.$store.dispatch('addCart', product)
+        this.$store.dispatch('addCart', product).then(res => {
+          console.log(res);
+          this.$toast.show(res, 2000)
+        })
 
       },
 
