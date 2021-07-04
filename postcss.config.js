@@ -10,7 +10,7 @@ module.exports = {
       selectorBlackList: ["ignore"], // 指定不转换为视窗单位的类名，在组件添加相应类名就可以不转换
       minPixelValue: 1, // 默认值1，小于或等于1px则不进行转换
       mediaQuery: false, // 是否在媒体查询的css代码中也进行转换，默认false
-      exclude: [/node_modules/, /^MainTab/, /TabBar/,  /dist/], // 设置忽略文件，用正则做目录名匹配
+      exclude: [/node_modules/,  /dist/], // 设置忽略文件，用正则做目录名匹配
       landscape: false // 是否处理横屏情况
     }
   }

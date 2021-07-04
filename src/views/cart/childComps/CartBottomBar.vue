@@ -68,8 +68,9 @@ export default {
 
 <style scoped>
   .cart-bottom-bar{
-    position: relative;
-    top: 435px;
+    position: fixed;
+    width: 100%;
+    bottom: 49px;
     display: flex;
     height: 40px;
     line-height: 40px;
